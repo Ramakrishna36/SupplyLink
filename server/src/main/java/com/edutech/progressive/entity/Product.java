@@ -1,7 +1,7 @@
 package com.edutech.progressive.entity;
 
 public class Product {
-    private int productid;
+    private int productId;
     private int warehouseId;
     private String productName;
     private String productDescription;
@@ -11,9 +11,9 @@ public class Product {
     public Product() {
     }
 
-    public Product(int productid, int warehouseId, String productName, String productDescription, int quantity,
+    public Product(int productId, int warehouseId, String productName, String productDescription, int quantity,
             Long price) {
-        this.productid = productid;
+        this.productId = productId;
         this.warehouseId = warehouseId;
         this.productName = productName;
         this.productDescription = productDescription;
@@ -21,12 +21,12 @@ public class Product {
         this.price = price;
     }
 
-    public int getProductid() {
-        return productid;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setProductid(int productid) {
-        this.productid = productid;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public int getWarehouseId() {

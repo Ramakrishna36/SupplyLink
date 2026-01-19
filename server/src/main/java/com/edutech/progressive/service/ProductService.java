@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProductService {
 
-    List<Product> getAllProducts() throws SQLException;
+    List<Product> getAllProducts()throws SQLException;
 
     Product getProductById(int productId)throws SQLException;
 

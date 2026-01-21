@@ -1,4 +1,5 @@
 
+
 package com.edutech.progressive.controller;
 
 import com.edutech.progressive.entity.Supplier;
@@ -29,7 +30,11 @@ public class SupplierController {
  
     @Autowired
     SupplierServiceImplJpa supplierServiceImplJpa;
- 
+        
+    // public SupplierController(SupplierServiceImplJpa supplierServiceImplJpa) {
+    //     this.supplierServiceImplJpa = supplierServiceImplJpa;
+    // }
+
     @GetMapping
     public ResponseEntity<List<Supplier>> getAllSuppliers() throws SQLException {
         List<Supplier> suppliers = supplierServiceImplJpa.getAllSuppliers();

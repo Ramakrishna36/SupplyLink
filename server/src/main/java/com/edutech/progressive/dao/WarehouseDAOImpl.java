@@ -38,7 +38,7 @@ public class WarehouseDAOImpl implements WarehouseDAO {
             statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
 
-            statement.setInt(1, warehouse.getSupplierId());
+            statement.setInt(1, warehouse.getSupplier().getSupplierId());
 
 
             statement.setString(2, warehouse.getWarehouseName());
@@ -200,7 +200,7 @@ public class WarehouseDAOImpl implements WarehouseDAO {
             statement = connection.prepareStatement(sql);
 
 
-            statement.setInt(1, warehouse.getSupplierId());
+            statement.setInt(1, warehouse.getSupplier().getSupplierId());
 
 
             statement.setString(2, warehouse.getWarehouseName());

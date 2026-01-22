@@ -1,26 +1,43 @@
 package com.edutech.progressive.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Warehouse implements Comparable<Warehouse> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int warehouseId;
-    private int supplierId;
-    private String warehouseName;
-    private String location;
+    //private int supplierId;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "supplierId")
+    private Supplier supplier;
+
+     private String location;
     private int capacity;
+    
+    private String warehouseName;
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
+
+   
 
     public Warehouse() {
     }
 
     public Warehouse(int warehouseId, int supplierId, String warehouseName, String location, int capacity) {
         this.warehouseId = warehouseId;
-        this.supplierId = supplierId;
+        this.supplier.setSupplierId(supplierId);
         this.warehouseName = warehouseName;
         this.location = location;
         this.capacity = capacity;
@@ -34,13 +51,13 @@ public class Warehouse implements Comparable<Warehouse> {
         this.warehouseId = warehouseId;
     }
 
-    public int getSupplierId() {
-        return supplierId;
-    }
+    // public int getSupplierId() {
+    //     return supplierId;
+    // }
 
-    public void setSupplierId(int supplierId) {
-        this.supplierId = supplierId;
-    }
+    // public void setSupplierId(int supplierId) {
+    //     this.supplierId = supplierId;
+    // }
 
     public String getWarehouseName() {
         return warehouseName;

@@ -1,11 +1,11 @@
-
 package com.edutech.progressive.controller;
-
+ 
 import com.edutech.progressive.entity.Supplier;
 import com.edutech.progressive.exception.SupplierAlreadyExistsException;
+import com.edutech.progressive.exception.SupplierDoesNotExistException;
 import com.edutech.progressive.service.impl.SupplierServiceImplArraylist;
 import com.edutech.progressive.service.impl.SupplierServiceImplJpa;
-
+ 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +17,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+ 
 import java.sql.SQLException;
 import java.util.List;
-
 @RestController
 @RequestMapping("/supplier")
 public class SupplierController {
@@ -30,11 +29,7 @@ public class SupplierController {
  
     @Autowired
     SupplierServiceImplJpa supplierServiceImplJpa;
-        
-    // public SupplierController(SupplierServiceImplJpa supplierServiceImplJpa) {
-    //     this.supplierServiceImplJpa = supplierServiceImplJpa;
-    // }
-
+ 
     @GetMapping
     public ResponseEntity<List<Supplier>> getAllSuppliers() throws SQLException {
         List<Supplier> suppliers = supplierServiceImplJpa.getAllSuppliers();
@@ -42,16 +37,15 @@ public class SupplierController {
     }
  
     @GetMapping("/{supplierId}")
-    public ResponseEntity<Supplier> getSupplierById(@PathVariable int supplierId) throws SQLException {
+    public ResponseEntity<?> getSupplierById(@PathVariable int supplierId) throws SQLException {
         try {
             Supplier supplier = supplierServiceImplJpa.getSupplierById(supplierId);
-            if (supplier != null) {
                 return new ResponseEntity<>(supplier, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        } catch (SQLException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (SupplierDoesNotExistException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            // Return a generic error message for any other exceptions
+            return new ResponseEntity<>("An unexpected error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
  
@@ -68,13 +62,15 @@ public class SupplierController {
     }
  
     @PutMapping("/{supplierId}")
-    public ResponseEntity<Void> updateSupplier(@PathVariable int supplierId, @RequestBody Supplier supplier) {
+    public ResponseEntity<?> updateSupplier(@PathVariable int supplierId, @RequestBody Supplier supplier) {
         try {
             supplier.setSupplierId(supplierId);
             supplierServiceImplJpa.updateSupplier(supplier);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (SQLException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (SupplierAlreadyExistsException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An unexpected error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
  

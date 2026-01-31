@@ -1,28 +1,29 @@
-package com.edutech.progressive.service.impl;
 
+package com.edutech.progressive.service.impl;
+ 
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
-
+ 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+ 
 import com.edutech.progressive.entity.Warehouse;
 import com.edutech.progressive.exception.NoWarehouseFoundForSupplierException;
 import com.edutech.progressive.repository.ProductRepository;
+import com.edutech.progressive.repository.ShipmentRepository;
 import com.edutech.progressive.repository.WarehouseRepository;
-import com.edutech.progressive.service.WarehouseService; 
+import com.edutech.progressive.service.WarehouseService;
+ 
  
 @Service
 public class WarehouseServiceImplJpa implements WarehouseService {
  
     @Autowired
     ProductRepository productRepository;
-
-
  
-    // @Autowired
-    // ShipmentRepository shipmentRepository;
+    @Autowired
+    ShipmentRepository shipmentRepository;
  
     private WarehouseRepository warehouseRepository;
  
@@ -30,12 +31,10 @@ public class WarehouseServiceImplJpa implements WarehouseService {
     public WarehouseServiceImplJpa(WarehouseRepository warehouseRepository) {
         this.warehouseRepository = warehouseRepository;
     }
-    
  
     @Override
     public List<Warehouse> getAllWarehouses() throws SQLException {
-         return warehouseRepository.findAll();
-
+        return warehouseRepository.findAll();
     }
  
     @Override
@@ -48,7 +47,6 @@ public class WarehouseServiceImplJpa implements WarehouseService {
         List<Warehouse> sortedWarehouses = warehouseRepository.findAll();
         Collections.sort(sortedWarehouses);
         return sortedWarehouses;
-
     }
  
     @Override
@@ -58,7 +56,7 @@ public class WarehouseServiceImplJpa implements WarehouseService {
  
     @Override
     public void deleteWarehouse(int warehouseId) throws SQLException {
-        // shipmentRepository.deleteByWarehouseId(warehouseId);
+        shipmentRepository.deleteByWarehouseId(warehouseId);
         productRepository.deleteByWarehouseId(warehouseId);
         warehouseRepository.deleteById(warehouseId);
     }
@@ -69,11 +67,10 @@ public class WarehouseServiceImplJpa implements WarehouseService {
     }
  
     @Override
-    public List<Warehouse> getWarehouseBySupplier(int supplierId) throws SQLException {
+    public List<Warehouse> getWarehouseBySupplier(int supplierId)  {
         List<Warehouse> warehouseList = warehouseRepository.findAllBySupplier_SupplierId(supplierId);
         if (warehouseList.isEmpty()) {
-            //throw new SQLException();
-             throw new NoWarehouseFoundForSupplierException("No warehouse found with the given supplier Id");
+            throw new NoWarehouseFoundForSupplierException("No warehouse found with the given supplier Id");
         }
         return warehouseList;
     }
